@@ -1,4 +1,5 @@
 import React from "react";
+import { useCallback } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import styles from "./app.module.css";
@@ -13,14 +14,17 @@ function App({ youtube }) {
   const selectVideo = (video) => {
     setSelectedVideo(video);
   };
-  const search = (query) => {
-    setSelectedVideo(null);
-    youtube.search(query).then((videos) => setVideos(videos));
-  };
+  const search = useCallback(
+    (query) => {
+      setSelectedVideo(null);
+      youtube.search(query).then((videos) => setVideos(videos));
+    },
+    [youtube]
+  );
 
   useEffect(() => {
     youtube.mostPopular().then((videos) => setVideos(videos));
-  }, []);
+  }, [youtube]);
 
   return (
     <div className={styles.app}>
